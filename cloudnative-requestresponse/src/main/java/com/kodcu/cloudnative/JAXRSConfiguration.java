@@ -1,4 +1,4 @@
-package com.kodcu;
+package com.kodcu.cloudnative;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
