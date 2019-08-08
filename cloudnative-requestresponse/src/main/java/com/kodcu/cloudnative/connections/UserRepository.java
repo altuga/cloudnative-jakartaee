@@ -1,9 +1,5 @@
 package com.kodcu.cloudnative.connections;
 
-import com.corneliadavis.cloudnative.connections.User;
-import com.kodcu.cloudnative.posts.Post;
-import org.springframework.data.repository.CrudRepository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -12,8 +8,6 @@ import javax.persistence.Query;
  * Created by altuga
  */
 public class UserRepository  {
-
-
 
     @PersistenceContext
     EntityManager em;
@@ -42,5 +36,7 @@ public class UserRepository  {
     }
 
 
-
+    public void save(User newUser) {
+        em.merge(newUser);
+    }
 }
