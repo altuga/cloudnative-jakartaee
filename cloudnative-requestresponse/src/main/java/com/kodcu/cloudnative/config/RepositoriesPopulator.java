@@ -1,39 +1,44 @@
 package com.kodcu.cloudnative.config;
 
 
+import com.kodcu.cloudnative.connections.Connection;
+import com.kodcu.cloudnative.connections.ConnectionsController;
+import com.kodcu.cloudnative.connections.User;
+import com.kodcu.cloudnative.posts.Post;
+import com.kodcu.cloudnative.posts.PostsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 
 /**
  * Created by corneliadavis on 9/4/17.
  */
 
-/*
-@Component
-public class RepositoriesPopulator implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
+
+
+public class RepositoriesPopulator  {
 
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
-    private ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        logger.info("Loading sample data");
-        // TODO fire at start up
-        populate();
-    }
+    @Inject
+    ConnectionsController connectionsWriteController;
 
+    @Inject
+    PostsController postsWriteController;
+
+
+    @PostConstruct
     private void populate() {
+        logger.info("Loading sample data");
         User user1, user2, user3;
         Post post1, post2, post3, post4;
         Connection connection1, connection2, connection3;
-        ConnectionsController connectionsWriteController = applicationContext.getBean(ConnectionsController.class);
-        PostsController postsWriteController = applicationContext.getBean(PostsController.class);
+        //ConnectionsController connectionsWriteController = applicationContext.getBean(ConnectionsController.class);
+        // PostsController postsWriteController = applicationContext.getBean(PostsController.class);
 
         user1 = new User("Cornelia", "cdavisafc");
         connectionsWriteController.newUser(user1,null);
@@ -62,4 +67,4 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
 }
 
-*/
+

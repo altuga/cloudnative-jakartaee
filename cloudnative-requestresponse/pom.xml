@@ -48,7 +48,7 @@
 
     </dependencies>
     <build>
-        <finalName>requestresponse</finalName>
+        <finalName>cloudnative-requestresponse</finalName>
     </build>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
