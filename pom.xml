@@ -10,7 +10,7 @@
 
 	<modules>
 		
-		<module>cloudnative-requestresponse</module>
+		<module>requestresponse</module>
 
 	</modules>
 
