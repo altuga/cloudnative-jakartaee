@@ -3,6 +3,7 @@ package com.kodcu.cloudnative.connections;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by altuga
@@ -30,7 +31,7 @@ public class UserRepository  {
     }
 
 
-    public Iterable<User> findAll() {
+    public List<User> findAll() {
         Query query = em.createQuery("select user from User user" );
         return query.getResultList();
     }

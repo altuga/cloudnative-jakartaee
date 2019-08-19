@@ -11,10 +11,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 
-import java.awt.*;
+import java.util.List;
+
 
 @Stateless
-@Path("users")
+@Path("/")
+@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ConnectionsController {
 
@@ -28,18 +30,19 @@ public class ConnectionsController {
 
 
     @GET
-	public Iterable<User> getUsers(HttpServletResponse response) {
+    @Path("/users")
+	public List<User> getUsers(HttpServletResponse response) {
 
-        logger.info("getting users");
-        Iterable<User> users;
+        logger.info("getting users...");
+        List<User> users;
         users = userRepository.findAll();
 
 		return users;
 	}
 
 	@GET
-    @Path("/{user}")
-	public User getByUsername(@PathParam("user") String user, HttpServletResponse response) {
+    @Path("/users/{user}")
+	public User getByUsername(@PathParam("user") String user) {
         logger.info("getting user " + user);
         try {
             Long id = Long.parseLong(user);
@@ -74,10 +77,10 @@ public class ConnectionsController {
     //@RequestMapping(method = RequestMethod.GET, value="/connections")
     @GET
     @Path("/connections")
-    public Iterable<Connection> getConnections() {
+    public List<Connection> getConnections() {
 
         logger.info("getting connections");
-        Iterable<Connection> connections;
+        List<Connection> connections;
         connections = connectionRepository.findAll();
 
         return connections;
@@ -86,10 +89,10 @@ public class ConnectionsController {
     //@RequestMapping(method = RequestMethod.GET, value="/connections/{username}")
     @GET
     @Path("/connections/{username}")
-    public Iterable<Connection> getConnections(@PathParam("username") String username) {
+    public List<Connection> getConnections(@PathParam("username") String username) {
         logger.info("getting connections for username " + username);
-        Long userId = getByUsername(username, null).getId();
-        Iterable<Connection> connections;
+        Long userId = getByUsername(username).getId();
+        List<Connection> connections;
         connections = connectionRepository.findByFollower(userId);
 
         return connections;

@@ -6,14 +6,15 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 @Path("/posts")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class PostsController {
 
     private static final Logger logger =
@@ -24,10 +25,10 @@ public class PostsController {
     PostRepository postRepository;
 
     @GET
-    public Iterable<Post> getPostsByUserId(
+    public List<Post> getPostsByUserId(
             @QueryParam("userIds") String userIds) {
 
-        Iterable<Post> posts;
+        List<Post> posts;
 
         if (userIds == null) {
             logger.info("getting all posts");

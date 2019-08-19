@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -27,6 +25,8 @@ import java.util.List;
 
 @Stateless
 @Path("connectionsposts")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ConnectionsPostsController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsPostsController.class);
@@ -54,7 +54,7 @@ public class ConnectionsPostsController {
     //@RequestMapping(method = RequestMethod.GET, value="/connectionsposts/{username}")
     @GET
     @Path("/{username}")
-    public Iterable<PostSummary> getByUsername(@PathParam("username") String username, HttpServletResponse response) {
+    public List<PostSummary> getByUsername(@PathParam("username") String username, HttpServletResponse response) {
 
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
@@ -65,8 +65,12 @@ public class ConnectionsPostsController {
         this.client = ClientBuilder.newClient();
         this.tut = this.client.target(connectionsUrl + username);
 
-        Iterable<Connection> connections = this.tut.request(MediaType.APPLICATION_JSON).get(Response.class).readEntity(new GenericType<Iterable<Connection>>() {
-        });
+        //List<Connection> connections = this.tut.request(MediaType.APPLICATION_JSON).get(Response.class).readEntity(new GenericType<List<Connection>>() {
+        //});
+
+        List<Connection> connections = this.tut.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Connection>>() {});
+
+
         ;
         //List<Collection> connections = (Connection[])responseForConnection.getEntity();
         // get connections
@@ -74,6 +78,7 @@ public class ConnectionsPostsController {
         //Connection[] connections = respConns.getBody();
         for (Connection connection : connections) {
             System.out.println(connection.getFollowed());
+            ids += connection.getFollowed().toString();
         }
         /*for (int i=0; i<connections.; i++) {
             if (i > 0) ids += ",";
@@ -86,11 +91,18 @@ public class ConnectionsPostsController {
         //Post[] posts = respPosts.getBody();
 
         this.tut = this.client.target(postsUrl + ids);
-        Response responseForPosts = this.tut.request().get();
-        Post[] posts = (Post[]) responseForPosts.getEntity();
 
-        for (int i = 0; i < posts.length; i++)
-            postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+        List<Post> posts = this.tut.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Post>>() {});
+
+        //Response responseForPosts = this.tut.request().get();
+        //Post[] posts = (Post[]) responseForPosts.getEntity();
+
+        for (Post post : posts) {
+            postSummaries.add(new PostSummary(getUsersname(post.getUserId()), post.getTitle(), post.getDate()));
+        }
+
+        //for (int i = 0; i < posts.length; i++)
+        //    postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
 
         return postSummaries;
     }

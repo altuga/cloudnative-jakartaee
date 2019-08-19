@@ -3,6 +3,7 @@ package com.kodcu.cloudnative.connections;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by altuga
@@ -13,14 +14,14 @@ public class ConnectionRepository  {
     EntityManager em;
 
 
-    public Iterable<Connection> findByFollower(long parseLong) {
+    public List<Connection> findByFollower(long parseLong) {
 
         Query query = em.createQuery("select conn from Connection conn where conn.follower = :follower");
         query.setParameter("follower" , parseLong);
         return query.getResultList();
     }
 
-    public Iterable<Connection> findAll() {
+    public List<Connection> findAll() {
         Query query = em.createQuery("select conn from Connection conn ");
         return query.getResultList();
 
