@@ -89,6 +89,8 @@ public class ConnectionsController {
     //@RequestMapping(method = RequestMethod.GET, value="/connections/{username}")
     @GET
     @Path("/connections/{username}")
+    @Consumes ( { MediaType.APPLICATION_JSON })
+    @Produces ( { MediaType.APPLICATION_JSON })
     public List<Connection> getConnections(@PathParam("username") String username) {
         logger.info("getting connections for username " + username);
         Long userId = getByUsername(username).getId();

@@ -19,8 +19,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 @Stateless
@@ -48,7 +48,7 @@ public class ConnectionsPostsController {
 
 
     private Client client;
-    private WebTarget tut;
+    private WebTarget target;
 
 
     //@RequestMapping(method = RequestMethod.GET, value="/connectionsposts/{username}")
@@ -63,12 +63,21 @@ public class ConnectionsPostsController {
         String ids = "";
         //RestTemplate restTemplate = new RestTemplate();
         this.client = ClientBuilder.newClient();
-        this.tut = this.client.target(connectionsUrl + username);
+        this.target = this.client.target(connectionsUrl + username);
 
-        //List<Connection> connections = this.tut.request(MediaType.APPLICATION_JSON).get(Response.class).readEntity(new GenericType<List<Connection>>() {
+        //List<Connection> connections = this.target.request(MediaType.APPLICATION_JSON).get(Response.class).readEntity(new GenericType<List<Connection>>() {
         //});
 
-        List<Connection> connections = this.tut.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Connection>>() {});
+        //Response response1 = this.target.request().get();
+        List<Map<String, Object>> connections = this.target.request(MediaType.APPLICATION_JSON).get(new GenericType<List>() {});
+
+        System.out.println(" --> " + connections);
+
+        for (Map<String, Object> connection : connections) {
+            System.out.println(connection.get("followed").toString());
+            ids += connection.get("followed").toString();
+        }
+
 
 
         ;
@@ -76,25 +85,28 @@ public class ConnectionsPostsController {
         // get connections
         // ResponseEntity<Connection[]> respConns = restTemplate.getForEntity(connectionsUrl+username, Connection[].class);
         //Connection[] connections = respConns.getBody();
+
+        /*
         for (Connection connection : connections) {
             System.out.println(connection.getFollowed());
             ids += connection.getFollowed().toString();
         }
+        */
         /*for (int i=0; i<connections.; i++) {
             if (i > 0) ids += ",";
             ids += connections[i].getFollowed().toString();
         }*/
-                        logger.info("connections = " + ids);
+        logger.info("connections = " + ids);
 
         // get posts for those connections
         //ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl+ids, Post[].class);
         //Post[] posts = respPosts.getBody();
 
-        this.tut = this.client.target(postsUrl + ids);
+        this.target = this.client.target(postsUrl + ids);
 
-        List<Post> posts = this.tut.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Post>>() {});
+        List<Post> posts = this.target.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Post>>() {});
 
-        //Response responseForPosts = this.tut.request().get();
+        //Response responseForPosts = this.target.request().get();
         //Post[] posts = (Post[]) responseForPosts.getEntity();
 
         for (Post post : posts) {
@@ -110,8 +122,8 @@ public class ConnectionsPostsController {
     private String getUsersname(Long id) {
 
         this.client = ClientBuilder.newClient();
-        this.tut = this.client.target(usersUrl + id);
-        Response responseForUsers = this.tut.request().get();
+        this.target = this.client.target(usersUrl + id);
+        Response responseForUsers = this.target.request().get();
         User user = (User) responseForUsers.getEntity();
 
         return user.getName();
