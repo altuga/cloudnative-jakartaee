@@ -1,5 +1,7 @@
 package com.kodcu.cloudnative.posts;
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -22,6 +24,18 @@ public class Post {
     protected Post() {}
 
     public Post(Long userId, String title, String body) {
+        this.date = new Date();
+        this.userId = userId;
+        this.title = title;
+        this.body = body;
+    }
+
+    @JsonbCreator
+    public Post(@JsonbProperty("id") Long id,
+                @JsonbProperty("userId") Long userId,
+                @JsonbProperty("title") String title,
+                @JsonbProperty("body")  String body) {
+        this.id = id;
         this.date = new Date();
         this.userId = userId;
         this.title = title;

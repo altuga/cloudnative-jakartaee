@@ -43,6 +43,7 @@ public class ConnectionsPostsController {
 
 
     //@Value("${newfromconnectionscontroller.usersUrl}")
+    @Inject
     @ConfigProperty(name = "newfromconnectionscontroller.usersUrl")
     private String usersUrl;
 
@@ -69,14 +70,23 @@ public class ConnectionsPostsController {
         //});
 
         //Response response1 = this.target.request().get();
-        List<Map<String, Object>> connections = this.target.request(MediaType.APPLICATION_JSON).get(new GenericType<List>() {});
+        List<Connection> connections = this.target.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Connection>>() {});
 
         System.out.println(" --> " + connections);
 
-        for (Map<String, Object> connection : connections) {
-            System.out.println(connection.get("followed").toString());
-            ids += connection.get("followed").toString();
+        for (int i = 0; i < connections.size(); i++) {
+            System.out.println(connections.get(i).getFollowed());
+            if (i > 0) ids += ",";
+            ids += connections.get(i).getFollowed().toString();
         }
+
+        /*
+
+        for (Connection connection : connections) {
+            System.out.println(connection.getFollowed());
+
+            ids += connection.getFollowed().toString();
+        }*/
 
 
 
@@ -123,8 +133,7 @@ public class ConnectionsPostsController {
 
         this.client = ClientBuilder.newClient();
         this.target = this.client.target(usersUrl + id);
-        Response responseForUsers = this.target.request().get();
-        User user = (User) responseForUsers.getEntity();
+        User user = this.target.request(MediaType.APPLICATION_JSON).get(new GenericType<User>() {});
 
         return user.getName();
 

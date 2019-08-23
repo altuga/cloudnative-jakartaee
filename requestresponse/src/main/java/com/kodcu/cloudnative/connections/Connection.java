@@ -1,5 +1,7 @@
 package com.kodcu.cloudnative.connections;
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +25,14 @@ public class Connection implements Serializable {
 
     protected Connection() {}
 
-    public Connection(Long follower, Long followed) {
+
+    public Connection( Long follower, Long followed) {
+        this.follower = follower;
+        this.followed = followed;
+    }
+    @JsonbCreator
+    public Connection(@JsonbProperty("id") Long id , @JsonbProperty("follower") Long follower, @JsonbProperty("followed") Long followed) {
+        this.id = id;
         this.follower = follower;
         this.followed = followed;
     }

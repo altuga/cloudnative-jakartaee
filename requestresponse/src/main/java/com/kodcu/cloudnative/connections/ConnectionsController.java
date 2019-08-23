@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -77,13 +78,14 @@ public class ConnectionsController {
     //@RequestMapping(method = RequestMethod.GET, value="/connections")
     @GET
     @Path("/connections")
-    public List<Connection> getConnections() {
+    public GenericEntity<List<Connection>> getConnections() {
 
         logger.info("getting connections");
         List<Connection> connections;
         connections = connectionRepository.findAll();
 
-        return connections;
+        return new GenericEntity<List<Connection>>(connections) {};
+
     }
 
     //@RequestMapping(method = RequestMethod.GET, value="/connections/{username}")
