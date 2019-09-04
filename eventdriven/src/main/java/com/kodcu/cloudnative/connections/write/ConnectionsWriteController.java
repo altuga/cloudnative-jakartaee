@@ -1,18 +1,14 @@
 package com.kodcu.cloudnative.connections.write;
 
 
-
 import com.kodcu.cloudnative.connections.ConnectionRepository;
 import com.kodcu.cloudnative.connections.User;
 import com.kodcu.cloudnative.connections.UserRepository;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -47,16 +43,15 @@ public class ConnectionsWriteController {
         userRepository.save(newUser);
 
         //event
-
-
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target( "http://localhost:8080/eventdriven/resources/connections/");
+        WebTarget target = client.target( "http://localhost:8080/eventdriven/resources/connectionsposts/users/");
 
-        target.request(MediaType.APPLICATION_JSON_TYPE)
+       String user =  target.request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(newUser,MediaType.APPLICATION_JSON),
                         String.class);
 
 
+        System.out.println(user);
 
     }
 

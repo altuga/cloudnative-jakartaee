@@ -27,7 +27,8 @@ public class UserRepository  {
 
         Query query = em.createQuery("select user from User user where user.username = :username");
         query.setParameter("username" , username);
-        return (User) query.getSingleResult();
+        User user = (User) query.getSingleResult();
+        return  user ;
     }
 
 
