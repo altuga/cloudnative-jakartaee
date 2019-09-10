@@ -18,6 +18,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 
 @Stateless
@@ -44,14 +45,15 @@ public class ConnectionsWriteController {
 
         //event
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target( "http://localhost:8080/eventdriven/resources/connectionsposts/users/");
+        WebTarget target = client.target("http://localhost:8080/eventdriven/resources/addusers/");
 
-       String user =  target.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(newUser,MediaType.APPLICATION_JSON),
-                        String.class);
+        Long id = newUser.getId();
+        newUser.setId(id + 1);
+        Response response = target.request()
+                .post(Entity.json(newUser));
 
 
-        System.out.println(user);
+        System.out.println(response);
 
     }
 

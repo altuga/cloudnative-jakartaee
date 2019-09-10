@@ -56,11 +56,11 @@ public class ConnectionsController {
 
     //@RequestMapping(method = RequestMethod.POST, value="/users")
     @POST
-    @Path("/connectionsposts/users/")
-    public void newUser(User newUser) {
-
+    @Path("/addusers/")
+    public User newUser(User newUser) {
         logger.info("Have a new user with username " + newUser.getUsername());
         userRepository.save(newUser);
+        return newUser;
 
     }
 
